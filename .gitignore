@@ -1,0 +1,14 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Environment
+.env
+
+# IDEs / OS
+.DS_Store
+.vscode/
+
+instance/
+budget.db
