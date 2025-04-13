@@ -1,5 +1,8 @@
 body {
-    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    transition: background-image 0.5s ease-in-out;
     color: #fff;
     min-height: 100vh;
   }

@@ -56,7 +56,8 @@
       "Partly cloudy ⛅": "https://assets2.lottiefiles.com/private_files/lf30_jo3p8kie.json",
       "Overcast ☁️": "https://assets6.lottiefiles.com/packages/lf20_xlkxtmul.json",
       "Light rain 🌧️": "https://assets10.lottiefiles.com/packages/lf20_xzgLBm.json",
-      "Thunderstorm ⛈️": "https://assets2.lottiefiles.com/packages/lf20_yqytzn0m.json"
+      "Thunderstorm ⛈️": "https://assets2.lottiefiles.com/packages/lf20_yqytzn0m.json",
+      "Snow fall ❄️": "https://assets10.lottiefiles.com/packages/lf20_UJNc2t.json"
     };
 
     async function getWeather() {
@@ -83,6 +84,19 @@
 
         const lottieURL = lottieMap[data.condition] || "";
         document.getElementById("weatherLottie").setAttribute("src", lottieURL);
+
+        const isDay = data.current.is_day === 1;
+        const bgMap = {
+          "Clear sky ☀️": isDay ? "/static/img/sunny_day.jpg" : "/static/img/sunny_night.jpg",
+          "Mainly clear 🌤️": isDay ? "/static/img/sunny_day.jpg" : "/static/img/sunny_night.jpg",
+          "Partly cloudy ⛅": isDay ? "/static/img/cloudy_day.jpg" : "/static/img/cloudy_night.jpg",
+          "Overcast ☁️": isDay ? "/static/img/cloudy_day.jpg" : "/static/img/cloudy_night.jpg",
+          "Light rain 🌧️": isDay ? "/static/img/rainy_day.jpg" : "/static/img/rainy_night.jpg",
+          "Thunderstorm ⛈️": isDay ? "/static/img/rainy_day.jpg" : "/static/img/rainy_night.jpg",
+          "Snow fall ❄️": isDay ? "/static/img/snow_day.jpg" : "/static/img/snow_night.jpg"
+        };
+
+        document.body.style.backgroundImage = `url('${bgMap[data.condition] || "/static/img/sunny_day.jpg"}')`;
 
         let forecastHTML = "";
         for (let i = 0; i < 3; i++) {

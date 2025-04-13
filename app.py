@@ -3,7 +3,6 @@ import requests
 
 app = Flask(__name__)
 
-
 def get_coordinates(city):
     geo_url = f"https://nominatim.openstreetmap.org/search?city={city}&format=json&limit=1"
     geo_res = requests.get(geo_url, headers={"User-Agent": "weather-app"})
@@ -11,7 +10,6 @@ def get_coordinates(city):
     if not data:
         return None, None
     return data[0]["lat"], data[0]["lon"]
-
 
 def get_weather_description(code):
     mapping = {
@@ -29,11 +27,9 @@ def get_weather_description(code):
     }
     return mapping.get(code, "Unknown")
 
-
 @app.route("/")
 def index():
     return render_template("index.html")
-
 
 @app.route("/weather")
 def get_weather():
@@ -78,7 +74,6 @@ def get_weather():
     except Exception as e:
         print("ERROR:", str(e))
         return jsonify({"error": "Internal server error"}), 500
-
 
 if __name__ == "__main__":
     app.run(debug=True)
