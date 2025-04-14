@@ -19,6 +19,8 @@
       <h2 id="temperature">22°C</h2>
       <p id="description">Cloudy</p>
 
+      <div class="extra-info" id="extraInfo"></div>
+
       <div class="forecast" id="forecastTiles"></div>
     </div>
   </div>
@@ -53,6 +55,15 @@
       document.getElementById("cityName").innerText = data.city;
       document.getElementById("temperature").innerText = `${Math.round(data.current.temperature)}°C`;
       document.getElementById("description").innerText = data.condition;
+
+      const localTime = new Date(data.current.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const extraInfo = document.getElementById("extraInfo");
+      extraInfo.innerHTML = `
+        <p><strong>Feels like:</strong> ${Math.round(data.current.apparent_temperature)}°C</p>
+        <p><strong>Humidity:</strong> ${data.current.relativehumidity_2m}%</p>
+        <p><strong>Wind:</strong> ${data.current.windspeed} km/h</p>
+        <p><strong>Local time:</strong> ${localTime}</p>
+      `;
 
       const forecastDiv = document.getElementById("forecastTiles");
       forecastDiv.innerHTML = "";

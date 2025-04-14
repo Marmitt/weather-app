@@ -46,7 +46,10 @@ def get_weather():
     try:
         weather_url = (
             f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}"
-            f"&current_weather=true&daily=temperature_2m_max,temperature_2m_min&timezone=Australia%2FSydney"
+            f"&current_weather=true"
+            f"&daily=temperature_2m_max,temperature_2m_min"
+            f"&hourly=relativehumidity_2m,apparent_temperature"
+            f"&timezone=auto"
         )
         weather_res = requests.get(weather_url)
         weather_data = weather_res.json()
@@ -54,10 +57,21 @@ def get_weather():
 
         current = weather_data.get("current_weather")
         daily = weather_data.get("daily")
+        hourly = weather_data.get("hourly")
 
-        if not current or not daily:
+        if not current or not daily or not hourly:
             print("Missing expected weather data.")
             return jsonify({"error": "No current weather data available"}), 500
+
+        # Extract closest humidity and apparent temperature using current time
+        current_time = current["time"]
+        try:
+            index = hourly["time"].index(current_time)
+            relative_humidity = hourly["relativehumidity_2m"][index]
+            apparent_temp = hourly["apparent_temperature"][index]
+        except ValueError:
+            relative_humidity = "-"
+            apparent_temp = current.get("temperature")
 
         weather_code = current.get("weathercode", -1)
         description = get_weather_description(weather_code)
@@ -66,7 +80,11 @@ def get_weather():
             "city": city,
             "lat": lat,
             "lon": lon,
-            "current": current,
+            "current": {
+                **current,
+                "relativehumidity_2m": relative_humidity,
+                "apparent_temperature": apparent_temp
+            },
             "condition": description,
             "daily": daily
         })

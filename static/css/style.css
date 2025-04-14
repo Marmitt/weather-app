@@ -2,9 +2,13 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', sans-serif;
-  background: url("/static/img/cloudy_day.jpg") no-repeat center center fixed;
   background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  transition: background-image 0.5s ease-in-out;
   color: #fff;
+  min-height: 100vh;
 }
 
 .overlay {
@@ -74,7 +78,20 @@ body {
 
 .weather-card p {
   font-size: 1.25rem;
-  margin: 0.5rem 0 2rem;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.extra-info {
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  color: #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+.extra-info p {
+  margin: 0;
 }
 
 .forecast {
