@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Weather App</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>body { background-image: url('/static/img/cloudy_day.jpg'); }</style>
 </head>
 <body>
   <div class="overlay"></div>
@@ -15,13 +16,42 @@
     </form>
 
     <div class="weather-card d-none" id="weatherCard">
-      <h1 id="cityName">Sydney</h1>
-      <h2 id="temperature">22°C</h2>
-      <p id="description">Cloudy</p>
+      <h1 id="cityName"></h1>
+      <h2 id="temperature"></h2>
+      <p id="description"></p>
 
-      <div class="extra-info" id="extraInfo"></div>
+      <div class="forecast d-none" id="extraTiles" style="margin-bottom: 1.5rem;">
+        <div class="forecast-tile">
+          <div class="date">Feels Like</div>
+          <div class="temp" id="feelsLikeBox"></div>
+        </div>
+        <div class="forecast-tile">
+          <div class="date">Wind</div>
+          <div class="temp" id="windBox"></div>
+        </div>
+        <div class="forecast-tile">
+          <div class="date">Local Time</div>
+          <div class="temp" id="localTimeBox"></div>
+        </div>
+      </div>
 
-      <div class="forecast" id="forecastTiles"></div>
+      <div class="forecast d-none" id="forecastTiles">
+        <div class="forecast-tile">
+          <div class="date" id="day1"></div>
+          <div class="temp" id="max1"></div>
+          <div class="temp" id="min1"></div>
+        </div>
+        <div class="forecast-tile">
+          <div class="date" id="day2"></div>
+          <div class="temp" id="max2"></div>
+          <div class="temp" id="min2"></div>
+        </div>
+        <div class="forecast-tile">
+          <div class="date" id="day3"></div>
+          <div class="temp" id="max3"></div>
+          <div class="temp" id="min3"></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -50,34 +80,33 @@
         "Snow fall ❄️": isDay ? "/static/img/snow_day.jpg" : "/static/img/snow_night.jpg"
       };
 
-      document.body.style.backgroundImage = `url('${bgMap[data.condition] || "/static/img/sunny_day.jpg"}')`;
+      document.body.style.backgroundImage = `url('${bgMap[data.condition] || "/static/img/cloudy_day.jpg"}')`;
 
-      document.getElementById("cityName").innerText = data.city;
+      document.getElementById("cityName").innerText =
+        data.city.charAt(0).toUpperCase() + data.city.slice(1);
+
       document.getElementById("temperature").innerText = `${Math.round(data.current.temperature)}°C`;
       document.getElementById("description").innerText = data.condition;
 
       const localTime = new Date(data.current.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      const extraInfo = document.getElementById("extraInfo");
-      extraInfo.innerHTML = `
-        <p><strong>Feels like:</strong> ${Math.round(data.current.apparent_temperature)}°C</p>
-        <p><strong>Humidity:</strong> ${data.current.relativehumidity_2m}%</p>
-        <p><strong>Wind:</strong> ${data.current.windspeed} km/h</p>
-        <p><strong>Local time:</strong> ${localTime}</p>
-      `;
+      document.getElementById("feelsLikeBox").innerText = `${Math.round(data.current.apparent_temperature)}°C`;
+      document.getElementById("windBox").innerText = `${data.current.windspeed} km/h`;
+      document.getElementById("localTimeBox").innerText = localTime;
 
-      const forecastDiv = document.getElementById("forecastTiles");
-      forecastDiv.innerHTML = "";
+      document.getElementById("day1").innerText = data.daily.time[0];
+      document.getElementById("max1").innerText = `↑ ${data.daily.temperature_2m_max[0]}°C`;
+      document.getElementById("min1").innerText = `↓ ${data.daily.temperature_2m_min[0]}°C`;
 
-      for (let i = 0; i < 3; i++) {
-        forecastDiv.innerHTML += `
-          <div class="forecast-tile">
-            <div class="date">${data.daily.time[i]}</div>
-            <div class="temp">↑ ${data.daily.temperature_2m_max[i]}°C</div>
-            <div class="temp">↓ ${data.daily.temperature_2m_min[i]}°C</div>
-          </div>
-        `;
-      }
+      document.getElementById("day2").innerText = data.daily.time[1];
+      document.getElementById("max2").innerText = `↑ ${data.daily.temperature_2m_max[1]}°C`;
+      document.getElementById("min2").innerText = `↓ ${data.daily.temperature_2m_min[1]}°C`;
 
+      document.getElementById("day3").innerText = data.daily.time[2];
+      document.getElementById("max3").innerText = `↑ ${data.daily.temperature_2m_max[2]}°C`;
+      document.getElementById("min3").innerText = `↓ ${data.daily.temperature_2m_min[2]}°C`;
+
+      document.getElementById("extraTiles").classList.remove("d-none");
+      document.getElementById("forecastTiles").classList.remove("d-none");
       document.getElementById("weatherCard").classList.remove("d-none");
     }
   </script>

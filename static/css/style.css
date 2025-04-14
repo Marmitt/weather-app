@@ -94,10 +94,16 @@ body {
   margin: 0;
 }
 
-.forecast {
+.forecast.d-none {
+  display: none !important;
+}
+
+.forecast:not(.d-none) {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
 }
 
 .forecast-tile {
