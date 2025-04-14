@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Weather App</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="overlay"></div>
@@ -20,9 +19,7 @@
       <h2 id="temperature">22°C</h2>
       <p id="description">Cloudy</p>
 
-      <div class="forecast" id="forecastTiles">
-        <!-- Forecast tiles will go here -->
-      </div>
+      <div class="forecast" id="forecastTiles"></div>
     </div>
   </div>
 
@@ -38,6 +35,20 @@
         alert(data.error);
         return;
       }
+
+      const isDay = data.current.is_day === 1;
+
+      const bgMap = {
+        "Clear sky ☀️": isDay ? "/static/img/sunny_day.jpg" : "/static/img/sunny_night.jpg",
+        "Mainly clear 🌤️": isDay ? "/static/img/sunny_day.jpg" : "/static/img/sunny_night.jpg",
+        "Partly cloudy ⛅": isDay ? "/static/img/cloudy_day.jpg" : "/static/img/cloudy_night.jpg",
+        "Overcast ☁️": isDay ? "/static/img/cloudy_day.jpg" : "/static/img/cloudy_night.jpg",
+        "Light rain 🌧️": isDay ? "/static/img/rainy_day.jpg" : "/static/img/rainy_night.jpg",
+        "Thunderstorm ⛈️": isDay ? "/static/img/rainy_day.jpg" : "/static/img/rainy_night.jpg",
+        "Snow fall ❄️": isDay ? "/static/img/snow_day.jpg" : "/static/img/snow_night.jpg"
+      };
+
+      document.body.style.backgroundImage = `url('${bgMap[data.condition] || "/static/img/sunny_day.jpg"}')`;
 
       document.getElementById("cityName").innerText = data.city;
       document.getElementById("temperature").innerText = `${Math.round(data.current.temperature)}°C`;
