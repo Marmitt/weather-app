@@ -6,8 +6,6 @@
   <title>World Weather Dashboard</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
 <body>
   <div class="container d-flex flex-column align-items-center justify-content-center py-5">
@@ -26,7 +24,6 @@
 
     <div id="weatherResult" class="weather-card w-100 text-center d-none">
       <h2 id="cityName"></h2>
-      <lottie-player id="weatherLottie" autoplay loop style="height: 120px;"></lottie-player>
       <h3 id="temperature"></h3>
       <p id="description"></p>
 
@@ -50,16 +47,6 @@
   </div>
 
   <script>
-    const lottieMap = {
-      "Clear sky ☀️": "https://assets8.lottiefiles.com/packages/lf20_jmBauI.json",
-      "Mainly clear 🌤️": "https://assets4.lottiefiles.com/private_files/lf30_tljjah7g.json",
-      "Partly cloudy ⛅": "https://assets2.lottiefiles.com/private_files/lf30_jo3p8kie.json",
-      "Overcast ☁️": "https://assets6.lottiefiles.com/packages/lf20_xlkxtmul.json",
-      "Light rain 🌧️": "https://assets10.lottiefiles.com/packages/lf20_xzgLBm.json",
-      "Thunderstorm ⛈️": "https://assets2.lottiefiles.com/packages/lf20_yqytzn0m.json",
-      "Snow fall ❄️": "https://assets10.lottiefiles.com/packages/lf20_UJNc2t.json"
-    };
-
     async function getWeather() {
       const city = document.getElementById("cityInput").value;
       document.getElementById("loading").classList.remove("d-none");
@@ -81,22 +68,6 @@
         document.getElementById("wind").innerText = `${data.current.windspeed} km/h`;
         document.getElementById("code").innerText = data.condition;
         document.getElementById("coords").innerText = `${parseFloat(data.lat).toFixed(2)}, ${parseFloat(data.lon).toFixed(2)}`;
-
-        const lottieURL = lottieMap[data.condition] || "";
-        document.getElementById("weatherLottie").setAttribute("src", lottieURL);
-
-        const isDay = data.current.is_day === 1;
-        const bgMap = {
-          "Clear sky ☀️": isDay ? "/static/img/sunny_day.jpg" : "/static/img/sunny_night.jpg",
-          "Mainly clear 🌤️": isDay ? "/static/img/sunny_day.jpg" : "/static/img/sunny_night.jpg",
-          "Partly cloudy ⛅": isDay ? "/static/img/cloudy_day.jpg" : "/static/img/cloudy_night.jpg",
-          "Overcast ☁️": isDay ? "/static/img/cloudy_day.jpg" : "/static/img/cloudy_night.jpg",
-          "Light rain 🌧️": isDay ? "/static/img/rainy_day.jpg" : "/static/img/rainy_night.jpg",
-          "Thunderstorm ⛈️": isDay ? "/static/img/rainy_day.jpg" : "/static/img/rainy_night.jpg",
-          "Snow fall ❄️": isDay ? "/static/img/snow_day.jpg" : "/static/img/snow_night.jpg"
-        };
-
-        document.body.style.backgroundImage = `url('${bgMap[data.condition] || "/static/img/sunny_day.jpg"}')`;
 
         let forecastHTML = "";
         for (let i = 0; i < 3; i++) {
