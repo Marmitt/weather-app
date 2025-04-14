@@ -10,6 +10,7 @@
 <body>
   <div class="overlay"></div>
   <div class="weather-container">
+    <h1 class="d-none app-title" id="appTitle">Weather App</h1>
     <form class="search-bar" onsubmit="getWeather(); return false;">
       <input type="text" id="cityInput" placeholder="Search for a city..." autocomplete="off">
       <button type="submit">Search</button>
@@ -56,9 +57,15 @@
   </div>
 
   <script>
+    function toTitleCase(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    }
+
     async function getWeather() {
-      const city = document.getElementById("cityInput").value.trim();
-      if (!city) return;
+      const cityInput = document.getElementById("cityInput").value.trim();
+      if (!cityInput) return;
+
+      const city = toTitleCase(cityInput);
 
       const res = await fetch(`/weather?city=${city}`);
       const data = await res.json();
@@ -82,9 +89,7 @@
 
       document.body.style.backgroundImage = `url('${bgMap[data.condition] || "/static/img/cloudy_day.jpg"}')`;
 
-      document.getElementById("cityName").innerText =
-        data.city.charAt(0).toUpperCase() + data.city.slice(1);
-
+      document.getElementById("cityName").innerText = city;
       document.getElementById("temperature").innerText = `${Math.round(data.current.temperature)}°C`;
       document.getElementById("description").innerText = data.condition;
 
@@ -105,6 +110,7 @@
       document.getElementById("max3").innerText = `↑ ${data.daily.temperature_2m_max[2]}°C`;
       document.getElementById("min3").innerText = `↓ ${data.daily.temperature_2m_min[2]}°C`;
 
+      document.getElementById("appTitle").classList.remove("d-none");
       document.getElementById("extraTiles").classList.remove("d-none");
       document.getElementById("forecastTiles").classList.remove("d-none");
       document.getElementById("weatherCard").classList.remove("d-none");
