@@ -5,6 +5,12 @@ Easily search any city to view real-time weather, temperature trends, and a dyna
 
 ---
 
+## 🌐 Live Demo
+
+🔗 View it live on Render: https://weather-app-w7cq.onrender.com/
+
+---
+
 ## 🚀 Features
 
 - 🔍 Search any city
